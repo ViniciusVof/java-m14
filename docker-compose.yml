@@ -1,61 +1,61 @@
 version: '3.1'
 
 services:
-  backend:
+  backend_m14:
     image: 'docker-spring-boot:latest'
-    container_name: backend
+    container_name: backend_m14
     build:
-      context: ../descomplica
+      context: ../aplicacao
       dockerfile: ./dockerfiles/Dockerfile.Spring.Boot
-    tty: true  
+    tty: true
     depends_on:
-      db_postgresql:
-        condition: service_healthy  
+      db_postgresql_m14:
+        condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db_postgresql:5432/bd_projeto_integrado
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db_postgresql_m14:5432/bd_modulo14
       - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=password-bd-projeto-integrado
+      - SPRING_DATASOURCE_PASSWORD=pwd-modulo14
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-    restart: unless-stopped  
+    restart: unless-stopped
     ports:
-        - 18080:8080  
+      - 18080:8080
     networks:
-        - projeto-integrado-network  
-          
-  db_postgresql:
+      - projeto-modulo14-integrado
+
+  db_postgresql_m14:
     image: 'postgres:13.1-alpine'
-    container_name: db_postgresql
+    container_name: db_postgresql_m14
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password-bd-projeto-integrado
-      - POSTGRES_DB=bd_projeto_integrado
+      - POSTGRES_PASSWORD=pwd-modulo14
+      - POSTGRES_DB=bd_modulo14
     restart: always
-    volumes: 
-          - ./bancodedados/data:/var/lib/postgresql/data
-          # copia o script sql para criacao das tabelas
-          - ./bancodedados/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    volumes:
+      - ./bancodedados/data:/var/lib/postgresql/data
+      # copia o script sql para criacao das tabelas
+      - ./bancodedados/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s
       timeout: 5s
       retries: 5
     ports:
-        - 25432:5432  
+      - 25432:5432
     networks:
-        - projeto-integrado-network    
-        
-  frontend:
-    container_name: frontend
+      - projeto-modulo14-integrado
+
+  frontend_m14:
+    container_name: frontend_14
     build:
-      context: ../descomplica
+      context: ../aplicacao
       dockerfile: ./dockerfiles/Dockerfile.React
-    ports: 
+    ports:
       - "13000:3000"
     networks:
-        - projeto-integrado-network  
-    volumes: 
-      - ./frontend/node_modules        
-      
+      - projeto-modulo14-integrado
+    volumes:
+      - ./frontend/node_modules:/app/frontend
+
 networks:
-    projeto-integrado-network:
-        driver: bridge      
+  projeto-modulo14-integrado:
+    driver: bridge
