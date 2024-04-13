@@ -23,52 +23,61 @@ import com.projeto.integrado.service.UserService;
 public class UserController {
 	@Autowired
 	UserService userService;
-	
+
 	@GetMapping
-	public ResponseEntity<List<User>> getAll(){
+	public ResponseEntity<List<User>> getAll() {
 		List<User> users = userService.getAll();
-		if(!users.isEmpty())
+		if (!users.isEmpty())
 			return new ResponseEntity<>(users, HttpStatus.OK);
-		else 
+		else
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
-	
-	@GetMapping("/{id}")
+
+	@GetMapping("/id/{id}")
 	public ResponseEntity<User> getById(@PathVariable Integer id) {
 		User user = userService.getById(id);
-		if(user != null)
-			return new ResponseEntity<>(user, HttpStatus.OK); 
-		else 
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);		
+		if (user != null)
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		else
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
-	
+
+	@GetMapping("/email/{email}")
+	public ResponseEntity<User> getById(@PathVariable String email) {
+		User user = userService.getByUserEmail(email);
+		if (user != null)
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		else
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+	}
+
 	@GetMapping("/info")
-    public User getUserDetails(){
-        // Recuperando o e-mail a partir do contexto de segurança
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        // Devolvendo os dados do usuario a partir do e-mail informado
-        return userService.findByEmail(email);
-    }
-	
+	public User getUserDetails() {
+		// Recuperando o e-mail a partir do contexto de segurança
+		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		// Devolvendo os dados do usuario a partir do e-mail informado
+		return userService.getByUserEmail(email);
+	}
+
 	@PostMapping
 	public ResponseEntity<User> saveUser(@RequestBody User user) {
 		return new ResponseEntity<>(userService.saveUser(user), HttpStatus.CREATED);
 	}
-	
+
 	@PutMapping("/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User user) {
 		User userAtualizada = userService.updateUser(id, user);
-		if(userAtualizada != null)
-			return new ResponseEntity<>(userAtualizada, HttpStatus.OK); 
-		else 
+		if (userAtualizada != null)
+			return new ResponseEntity<>(userAtualizada, HttpStatus.OK);
+		else
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Boolean> deleteUser(@PathVariable Integer id) {
-		if(userService.deleteUser(id))
+		if (userService.deleteUser(id))
 			return new ResponseEntity<>(true, HttpStatus.OK);
-		else 
+		else
 			return new ResponseEntity<>(false, HttpStatus.OK);
 	}
 }

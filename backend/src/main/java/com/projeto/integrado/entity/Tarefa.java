@@ -12,6 +12,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 @Entity
 @Table(name = "tarefa")
 public class Tarefa {
@@ -38,10 +42,12 @@ public class Tarefa {
 
 	@ManyToOne
 	@JoinColumn(name = "projeto_id", referencedColumnName = "projeto_id")
+	@JsonProperty(access = Access.WRITE_ONLY)
 	Projeto projeto;
 
 	@OneToOne
 	@JoinColumn(name = "recurso_id", referencedColumnName = "recurso_id")
+	@JsonProperty(access = Access.WRITE_ONLY)
 	Recurso recurso;
 
 	public Integer getTarefaId() {

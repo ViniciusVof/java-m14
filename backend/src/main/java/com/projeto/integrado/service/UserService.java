@@ -10,41 +10,41 @@ import com.projeto.integrado.repository.UserRepository;
 public class UserService {
 	@Autowired
 	UserRepository userRepository;
-	
-	public List<User> getAll(){
+
+	public List<User> getAll() {
 		return userRepository.findAll();
 	}
-	
+
 	public User getById(Integer id) {
-		return userRepository.findById(id).orElse(null) ;
+		return userRepository.findById(id).orElse(null);
 	}
-	
-	public User findByEmail(String email){
-        return userRepository.findByUserEmail(email).get();
-    }
-	
+
+	public User getByUserEmail(String email) {
+		return userRepository.findByUserEmail(email).orElse(null);
+	}
+
 	public User saveUser(User user) {
 		return userRepository.save(user);
 	}
-	
+
 	public User updateUser(Integer id, User user) {
 		User userAtualizado = userRepository.findById(id).orElse(null);
-		if(userAtualizado != null) {
+		if (userAtualizado != null) {
 			userAtualizado.setUserEmail(user.getUserEmail());
-			//userAtualizado.setUserPassword(user.getUserPassword());
+			// userAtualizado.setUserPassword(user.getUserPassword());
 			userAtualizado.setUsuarioNome(user.getUsuarioNome());
 			return userRepository.save(userAtualizado);
-		}else {
+		} else {
 			return null;
 		}
 	}
 
 	public Boolean deleteUser(Integer id) {
 		User user = userRepository.findById(id).orElse(null);
-		if(user != null) {
+		if (user != null) {
 			userRepository.delete(user);
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}

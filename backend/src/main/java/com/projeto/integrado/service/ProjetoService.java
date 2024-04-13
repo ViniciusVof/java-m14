@@ -10,22 +10,26 @@ import com.projeto.integrado.repository.ProjetoRepository;
 public class ProjetoService {
 	@Autowired
 	ProjetoRepository projetoRepository;
-	
-	public List<Projeto> getAll(){
+
+	public List<Projeto> getAll() {
 		return projetoRepository.findAll();
 	}
-	
+
 	public Projeto getById(Integer id) {
-		return projetoRepository.findById(id).orElse(null) ;
+		return projetoRepository.findById(id).orElse(null);
 	}
-	
+
+	public Projeto getByProjetoDescricao(String descricao) {
+		return projetoRepository.findByProjetoDescricao(descricao).orElse(null);
+	}
+
 	public Projeto saveProjeto(Projeto projeto) {
 		return projetoRepository.save(projeto);
 	}
-	
+
 	public Projeto updateProjeto(Integer id, Projeto projeto) {
 		Projeto projetoAtualizado = projetoRepository.findById(id).orElse(null);
-		if(projetoAtualizado != null) {
+		if (projetoAtualizado != null) {
 			projetoAtualizado.setGerentes(projeto.getGerentes());
 			projetoAtualizado.setProjetoDescricao(projeto.getProjetoDescricao());
 			projetoAtualizado.setProjetoFim(projeto.getProjetoFim());
@@ -33,17 +37,17 @@ public class ProjetoService {
 			projetoAtualizado.setProjetoNome(projeto.getProjetoNome());
 			projetoAtualizado.setProjetoStatus(projeto.getProjetoStatus());
 			return projetoRepository.save(projetoAtualizado);
-		}else {
+		} else {
 			return null;
 		}
 	}
 
 	public Boolean deleteProjeto(Integer id) {
 		Projeto projeto = projetoRepository.findById(id).orElse(null);
-		if(projeto != null) {
+		if (projeto != null) {
 			projetoRepository.delete(projeto);
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}

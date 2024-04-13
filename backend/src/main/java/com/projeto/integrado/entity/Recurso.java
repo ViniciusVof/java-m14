@@ -11,6 +11,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "recurso")
 public class Recurso {
@@ -25,9 +28,11 @@ public class Recurso {
 	@Column(name = "recurso_funcao")
 	private String recursoFuncao;
 
+	@JsonIgnore
 	@ManyToMany(mappedBy = "gerentes")
 	private Set<Projeto> projetos;
 
+	@JsonIgnore
 	@OneToOne(mappedBy = "recurso")
 	Tarefa tarefa;
 
@@ -59,6 +64,7 @@ public class Recurso {
 		return projetos;
 	}
 
+	@JsonIgnoreProperties
 	public void setProjetos(Set<Projeto> projetos) {
 		this.projetos = projetos;
 	}
@@ -66,6 +72,8 @@ public class Recurso {
 	public Tarefa getTarefa() {
 		return tarefa;
 	}
+
+	@JsonIgnoreProperties
 
 	public void setTarefa(Tarefa tarefa) {
 		this.tarefa = tarefa;

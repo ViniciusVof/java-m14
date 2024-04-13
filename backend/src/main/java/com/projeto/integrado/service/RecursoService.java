@@ -10,36 +10,40 @@ import com.projeto.integrado.repository.RecursoRepository;
 public class RecursoService {
 	@Autowired
 	RecursoRepository recursoRepository;
-	
-	public List<Recurso> getAll(){
+
+	public List<Recurso> getAll() {
 		return recursoRepository.findAll();
 	}
-	
+
 	public Recurso getById(Integer id) {
-		return recursoRepository.findById(id).orElse(null) ;
+		return recursoRepository.findById(id).orElse(null);
 	}
-	
+
+	public Recurso getByRecursoNome(String name) {
+		return recursoRepository.findByRecursoNome(name).orElse(null);
+	}
+
 	public Recurso saveRecurso(Recurso recurso) {
 		return recursoRepository.save(recurso);
 	}
-	
+
 	public Recurso updateRecurso(Integer id, Recurso recurso) {
 		Recurso recursoAtualizado = recursoRepository.findById(id).orElse(null);
-		if(recursoAtualizado != null) {
+		if (recursoAtualizado != null) {
 			recursoAtualizado.setRecursoFuncao(recurso.getRecursoFuncao());
 			recursoAtualizado.setRecursoNome(recurso.getRecursoNome());
 			return recursoRepository.save(recursoAtualizado);
-		}else {
+		} else {
 			return null;
 		}
 	}
 
 	public Boolean deleteRecurso(Integer id) {
 		Recurso recurso = recursoRepository.findById(id).orElse(null);
-		if(recurso != null) {
+		if (recurso != null) {
 			recursoRepository.delete(recurso);
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}

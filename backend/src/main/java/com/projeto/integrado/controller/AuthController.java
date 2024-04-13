@@ -34,7 +34,7 @@ public class AuthController {
 
     // Registro de usuario
     @PostMapping("/registro")
-    public Map<String, Object> registerHandler(@RequestBody User user){
+    public Map<String, Object> registerHandler(@RequestBody User user) {
         // Encriptando a senha usando o Bcrypt
         String encodedPass = passwordEncoder.encode(user.getUserPassword());
         user.setUserPassword(encodedPass);
@@ -42,7 +42,7 @@ public class AuthController {
         user = userService.saveUser(user);
 
         // Gerando o token JWT a partir do e-mail do Usuario
-        //String token = jwtUtil.generateToken(user.getEmail());
+        // String token = jwtUtil.generateToken(user.getEmail());
 
         User usuarioResumido = new User();
         usuarioResumido.setUsuarioNome(user.getUsuarioNome());
@@ -57,20 +57,20 @@ public class AuthController {
 
     // Login de usuario
     @PostMapping("/login")
-    public Map<String, Object> loginHandler(@RequestBody LoginCredentials body){
+    public Map<String, Object> loginHandler(@RequestBody LoginCredentials body) {
         try {
             // Criando o token que sera usado no processo de autenticacao
-            UsernamePasswordAuthenticationToken authInputToken =
-                    new UsernamePasswordAuthenticationToken(body.getEmail(), body.getPassword());
+            UsernamePasswordAuthenticationToken authInputToken = new UsernamePasswordAuthenticationToken(
+                    body.getEmail(), body.getPassword());
 
             // Autenticando as credenciais de login
             authManager.authenticate(authInputToken);
 
             // Se o processo de autenticacao foi concluido com sucesso - etapa anterior,
             // eh gerado o JWT
-            //String token = jwtUtil.generateToken(body.getEmail());
+            // String token = jwtUtil.generateToken(body.getEmail());
 
-            User user = userService.findByEmail(body.getEmail());
+            User user = userService.getByUserEmail(body.getEmail());
             User usuarioResumido = new User();
             usuarioResumido.setUsuarioNome(user.getUsuarioNome());
             usuarioResumido.setUserEmail(user.getUserEmail());
@@ -80,7 +80,7 @@ public class AuthController {
 
             // Responde com o JWT
             return Collections.singletonMap("jwt-token", token);
-        }catch (AuthenticationException authExc){
+        } catch (AuthenticationException authExc) {
             throw new RuntimeException("Credenciais Invalidas");
         }
     }

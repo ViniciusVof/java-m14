@@ -22,44 +22,53 @@ import com.projeto.integrado.service.ProjetoService;
 public class ProjetoController {
 	@Autowired
 	ProjetoService projetoService;
-	
+
 	@GetMapping
-	public ResponseEntity<List<Projeto>> getAll(){
+	public ResponseEntity<List<Projeto>> getAll() {
 		List<Projeto> projetos = projetoService.getAll();
-		if(!projetos.isEmpty())
+		if (!projetos.isEmpty())
 			return new ResponseEntity<>(projetos, HttpStatus.OK);
-		else 
+		else
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
-	
-	@GetMapping("/{id}")
+
+	@GetMapping("/id/{id}")
 	public ResponseEntity<Projeto> getById(@PathVariable Integer id) {
 		Projeto projeto = projetoService.getById(id);
-		if(projeto != null)
-			return new ResponseEntity<>(projeto, HttpStatus.OK); 
-		else 
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);		
+		if (projeto != null)
+			return new ResponseEntity<>(projeto, HttpStatus.OK);
+		else
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
-	
+
+	@GetMapping("/descricao/{descricao}")
+	public ResponseEntity<Projeto> getById(@PathVariable String descricao) {
+		Projeto projeto = projetoService.getByProjetoDescricao(descricao);
+		if (projeto != null)
+			return new ResponseEntity<>(projeto, HttpStatus.OK);
+		else
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+	}
+
 	@PostMapping
 	public ResponseEntity<Projeto> saveProjeto(@RequestBody Projeto projeto) {
 		return new ResponseEntity<>(projetoService.saveProjeto(projeto), HttpStatus.CREATED);
 	}
-	
+
 	@PutMapping("/{id}")
 	public ResponseEntity<Projeto> updateProjeto(@PathVariable Integer id, @RequestBody Projeto projeto) {
 		Projeto projetoAtualizada = projetoService.updateProjeto(id, projeto);
-		if(projetoAtualizada != null)
-			return new ResponseEntity<>(projetoAtualizada, HttpStatus.OK); 
-		else 
+		if (projetoAtualizada != null)
+			return new ResponseEntity<>(projetoAtualizada, HttpStatus.OK);
+		else
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Boolean> deleteProjeto(@PathVariable Integer id) {
-		if(projetoService.deleteProjeto(id))
+		if (projetoService.deleteProjeto(id))
 			return new ResponseEntity<>(true, HttpStatus.OK);
-		else 
+		else
 			return new ResponseEntity<>(false, HttpStatus.OK);
 	}
 }
